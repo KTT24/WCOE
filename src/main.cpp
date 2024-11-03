@@ -21,7 +21,24 @@ controller Controller1;
 brain Brain;
 
 // define your global instances of motors and other devices here
-motor Motor11(PORT11, ratio18_1, true);
+motor leftMotorFront = motor(PORT8, ratio18_1, true);
+motor leftMotorMiddle = motor(PORT9, ratio18_1, true);
+motor leftMotorBack = motor(PORT10, ratio18_1, true);
+
+motor rightMotorFront = motor(PORT11, ratio18_1, true);
+motor rightMotorMiddle = motor(PORT2, ratio18_1, true);
+motor rightMotorBack = motor(PORT13, ratio18_1, true);
+
+// ============= Motor Groups ===============
+
+motor_group leftDrive(leftMotorFront, leftMotorBack);
+motor_group rightDrive(rightMotorFront, rightMotorBack);
+
+// ============= Drivetrain ===============
+
+drivetrain Drivetrain = drivetrain(leftDrive, rightDrive, 319.19, 320, 320, mm, 1);
+
+
 
 /*---------------------------------------------------------------------------*/
 /*                          Pre-Autonomous Functions                         */
@@ -37,8 +54,9 @@ void pre_auton(void) {
   // All activities that occur before the competition starts
   // Example: clearing encoders, setting servo positions, ...
   // Set up motors
-  Motor11.setVelocity(50, percent); // Set initial velocity to 50%
-  Motor11.setStopping(brake);       // Set stopping mode to brake
+  //Motor11.setVelocity(50, percent); // Set initial velocity to 50%
+  //Motor11.setStopping(brake);       // Set stopping mode to brake
+  
   
 }
 
@@ -56,11 +74,13 @@ void autonomous(void) {
   // ..........................................................................
   // Insert autonomous user code here.
   // ..........................................................................
-  Brain.Screen.clearScreen();
-  Brain.Screen.print("Autonomous Running....");
+  //Brain.Screen.clearScreen();
+  //Brain.Screen.print("Autonomous Running....");
 
 
-  Motor11.spin(forward);
+  //Motor11.spin(forward);
+
+
   
   
 }
@@ -81,8 +101,35 @@ void usercontrol(void) {
     // This is the main execution loop for the user control program.
     // Each time through the loop your program should update motor + servo
     // values based on feedback from the joysticks.
-    int rightJoystickValue = Controller1.Axis2.position();
-    Motor11.spin(forward, rightJoystickValue, percent);
+
+    // ================= Joystick Values =================
+    double driveJoy = Controller1.Axis2.position();
+    double turnJoy = Controller1.Axis4.position();
+
+
+    // ================= Drive Code =================
+    leftMotorFront.spin(forward, (driveJoy + turnJoy), percent);
+    leftMotorMiddle.spin(forward, (driveJoy + turnJoy), percent);
+    leftMotorBack.spin(forward, (driveJoy + turnJoy), percent);
+
+    rightMotorFront.spin(forward, (driveJoy - turnJoy), percent);
+    rightMotorMiddle.spin(forward, (driveJoy - turnJoy), percent);
+    rightMotorBack.spin(forward, (driveJoy - turnJoy), percent);
+
+    // leftMotorFront.spin(forward, (driveJoy + turnJoy) * .5, percent);
+    // leftMotorMiddle.spin(forward, (driveJoy + turnJoy) * .5, percent);
+    // leftMotorBack.spin(forward, (driveJoy + turnJoy) * .5, percent);
+
+    // rightMotorFront.spin(forward, (driveJoy - turnJoy) * 0.5, percent);
+    // rightMotorMiddle.spin(forward, (driveJoy - turnJoy) * 0.5, percent);
+    // rightMotorBack.spin(forward, (driveJoy - turnJoy) * 0.5, percent);
+
+  
+    
+    
+
+    
+
 
     // ........................................................................
     // Insert user code here. This is where you use the joystick values to
@@ -106,6 +153,7 @@ int main() {
   pre_auton();
 
 
+    
 
   // Prevent main from exiting with an infinite loop.
   while (true) {
