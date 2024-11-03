@@ -1,0 +1,13 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "C/C++ Runner: Debug Session",
+      "type": "lldb",
+      "request": "launch",
+      "args": [],
+      "cwd": "/Users/kutterthornton/Documents/vex-vscode-projects/WCOE-TEST-FILE/src",
+      "program": "/Users/kutterthornton/Documents/vex-vscode-projects/WCOE-TEST-FILE/src/build/Debug/outDebug"
+    }
+  ]
+}
