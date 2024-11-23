@@ -20,22 +20,19 @@ controller Controller1;
 // Delcare the brain variable 
 brain Brain;
 
-// define your global instances of motors and other devices here
-motor leftMotorFront = motor(PORT8, ratio18_1, true);
-motor leftMotorMiddle = motor(PORT9, ratio18_1, true);
+// Left Motor
+motor leftMotorFront = motor(PORT9, ratio18_1, true);
 motor leftMotorBack = motor(PORT10, ratio18_1, true);
 
+// Right Motors
 motor rightMotorFront = motor(PORT11, ratio18_1, true);
-motor rightMotorMiddle = motor(PORT2, ratio18_1, true);
-motor rightMotorBack = motor(PORT13, ratio18_1, true);
+motor rightMotorBack = motor(PORT12, ratio18_1, true);
 
 // ============= Motor Groups ===============
-
 motor_group leftDrive(leftMotorFront, leftMotorBack);
 motor_group rightDrive(rightMotorFront, rightMotorBack);
 
 // ============= Drivetrain ===============
-
 drivetrain Drivetrain = drivetrain(leftDrive, rightDrive, 319.19, 320, 320, mm, 1);
 
 
@@ -103,27 +100,12 @@ void usercontrol(void) {
     // values based on feedback from the joysticks.
 
     // ================= Joystick Values =================
-    double driveJoy = Controller1.Axis2.position();
-    double turnJoy = Controller1.Axis4.position();
+    double driveJoy = Controller1.Axis4.position();
+    double turnJoy = Controller1.Axis2.position();
 
-
-    // ================= Drive Code =================
-    leftMotorFront.spin(forward, (driveJoy + turnJoy), percent);
-    leftMotorMiddle.spin(forward, (driveJoy + turnJoy), percent);
-    leftMotorBack.spin(forward, (driveJoy + turnJoy), percent);
-
-    rightMotorFront.spin(forward, (driveJoy - turnJoy), percent);
-    rightMotorMiddle.spin(forward, (driveJoy - turnJoy), percent);
-    rightMotorBack.spin(forward, (driveJoy - turnJoy), percent);
-
-    // leftMotorFront.spin(forward, (driveJoy + turnJoy) * .5, percent);
-    // leftMotorMiddle.spin(forward, (driveJoy + turnJoy) * .5, percent);
-    // leftMotorBack.spin(forward, (driveJoy + turnJoy) * .5, percent);
-
-    // rightMotorFront.spin(forward, (driveJoy - turnJoy) * 0.5, percent);
-    // rightMotorMiddle.spin(forward, (driveJoy - turnJoy) * 0.5, percent);
-    // rightMotorBack.spin(forward, (driveJoy - turnJoy) * 0.5, percent);
-
+    // =================== Drive Code ====================
+    leftDrive.spin(forward, driveJoy + turnJoy, percent);
+    rightDrive.spin(forward, driveJoy - turnJoy, percent);
   
     
     
